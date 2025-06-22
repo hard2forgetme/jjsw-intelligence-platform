@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JJSW | Strategic Intelligence Platform</title>
+    <!-- Tailwind CSS with typography plugin -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Embedded CSS from style.css -->
+    <style>
+        :root {
+            --color-background: #030712; /* gray-950 */
+            --color-surface: #111827; /* gray-900 */
+            --color-panel: #1f2937; /* gray-800 */
+            --color-text-primary: #f9fafb; /* gray-50 */
+            --color-text-secondary: #d1d5db; /* gray-300 */
+            --color-text-muted: #6b7280; /* gray-500 */
+            --color-accent: #b91c1c; /* red-700 */
+            --color-accent-hover: #991b1b; /* red-800 */
+            --color-border: #374151; /* gray-700 */
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-surface);
+            color: var(--color-text-secondary);
+            font-family: var(--font-sans);
+        }
+
+        #main-header {
+            font-family: var(--font-mono);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 1.5rem; /* 24px */
+            font-weight: 700;
+            color: var(--color-text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title i {
+            color: var(--color-accent);
+            margin-right: 1rem;
+            height: 28px;
+            width: 28px;
+        }
+
+        /* Custom styles for rendered markdown content */
+        .prose-custom {
+            color: var(--color-text-secondary);
+        }
+
+        .prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4, .prose-custom h5, .prose-custom h6 {
+            color: var(--color-text-primary);
+            font-family: var(--font-mono);
+            letter-spacing: 0.025em;
+        }
+
+        .prose-custom h3 {
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .prose-custom strong {
+            color: var(--color-text-primary);
+        }
+
+        .prose-custom a {
+            color: var(--color-accent);
+            transition: color 0.3s ease;
+        }
+
+        .prose-custom a:hover {
+            color: var(--color-accent-hover);
+        }
+
+        .prose-custom blockquote {
+            border-left-color: var(--color-accent);
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        .prose-custom code {
+            color: var(--color-accent);
+            background-color: var(--color-panel);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+        }
+
+        .prose-custom table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .prose-custom th {
+            color: var(--color-text-primary);
+            background-color: var(--color-panel);
+            border: 1px solid var(--color-border);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .prose-custom td {
+            border: 1px solid var(--color-border);
+            padding: 0.75rem;
+            vertical-align: top;
+        }
+
+        .prose-custom tbody tr:nth-child(odd) {
+            background-color: var(--color-surface);
+        }
+
+        .prose-custom tbody tr:nth-child(even) {
+            background-color: rgba(31, 41, 55, 0.5); /* gray-800 with opacity */
+        }
+
+        /* Target Cards Styling */
+        .target-card {
+            background-color: var(--color-panel);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .target-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(185, 28, 28, 0.2), 0 4px 6px -4px rgba(185, 28, 28, 0.2);
+            border-color: var(--color-accent);
+        }
+
+        .card-title {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--color-text-primary);
+            font-size: 1.125rem;
+        }
+
+        .card-subtitle {
+            font-family: var(--font-mono);
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .card-rationale-title {
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-rationale-text {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--color-surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--color-border);
+            border-radius: 20px;
+            border: 3px solid var(--color-surface);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--color-accent);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background-color: var(--color-panel);
+            border: 1px solid var(--color-border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300 font-sans antialiased">
+
+    <!-- Header Section -->
+    <header id="main-header" class="bg-gray-900/80 backdrop-blur-lg border-b border-gray-700/50 sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <i data-lucide="shield-alert" class="h-8 w-8 text-red-700 mr-3"></i>
+                    <h1 class="text-sm sm:text-lg font-bold tracking-wider text-gray-100 uppercase">
+                        JJSW Intelligence Platform
+                    </h1>
+                </div>
+                <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#master-report" class="text-gray-400 hover:text-red-600 transition-colors duration-300">Master Report</a>
+                    <a href="#texas-briefing" class="text-gray-400 hover:text-red-600 transition-colors duration-300">Texas Briefing</a>
+                    <a href="#priority-targets" class="text-gray-400 hover:text-red-600 transition-colors duration-300">Priority Targets</a>
+                    <a href="#action-frameworks" class="text-gray-400 hover:text-red-600 transition-colors duration-300">Action Frameworks</a>
+                    <a href="#legal-strategies" class="text-gray-400 hover:text-red-600 transition-colors duration-300">Legal Strategies</a>
+                    <a href="#resource-map" class="text-gray-400 hover:text-red-600 transition-colors duration-300">Resource Map</a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-400 hover:text-white">
+                        <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-900 border-t border-gray-700/50">
+            <a href="#master-report" class="block text-center py-3 text-gray-400 hover:bg-gray-800 hover:text-red-600 transition-colors duration-300">Master Report</a>
+            <a href="#texas-briefing" class="block text-center py-3 text-gray-400 hover:bg-gray-800 hover:text-red-600 transition-colors duration-300">Texas Briefing</a>
+            <a href="#priority-targets" class="block text-center py-3 text-gray-400 hover:bg-gray-800 hover:text-red-600 transition-colors duration-300">Priority Targets</a>
+            <a href="#action-frameworks" class="block text-center py-3 text-gray-400 hover:bg-gray-800 hover:text-red-600 transition-colors duration-300">Action Frameworks</a>
+            <a href="#legal-strategies" class="block text-center py-3 text-gray-400 hover:bg-gray-800 hover:text-red-600 transition-colors duration-300">Legal Strategies</a>
+            <a href="#resource-map" class="block text-center py-3 text-gray-400 hover:bg-gray-800 hover:text-red-600 transition-colors duration-300">Resource Map</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <section id="mission" class="text-center pt-8 pb-16">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-100 tracking-tight">JUVENILE JUSTICE SYSTEM WARFARE</h2>
+            <p class="mt-2 text-lg sm:text-xl lg:text-2xl font-semibold text-red-600 tracking-wider">A STRATEGIC INTELLIGENCE PLATFORM</p>
+            <div id="mission-statement-container" class="mt-8 max-w-4xl mx-auto text-lg text-gray-400"></div>
+        </section>
+
+        <div class="space-y-24">
+            <!-- Content sections will be rendered here by JavaScript -->
+            <section id="master-report" class="scroll-mt-20">
+                <div id="master-report-container"></div>
+            </section>
+
+            <section id="texas-briefing" class="scroll-mt-20">
+                <div id="texas-briefing-container"></div>
+            </section>
+
+            <section id="priority-targets" class="scroll-mt-20">
+                <div id="priority-targets-container"></div>
+            </section>
+
+            <section id="action-frameworks" class="scroll-mt-20">
+                <div id="action-frameworks-container"></div>
+            </section>
+
+            <section id="legal-strategies" class="scroll-mt-20">
+                <div id="legal-strategies-container"></div>
+            </section>
+
+            <section id="resource-map" class="scroll-mt-20">
+                <div id="resource-map-container"></div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="mt-24 border-t border-gray-700/50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-500">
+            <p>&copy; 2025 JJSW Intelligence Directorate. All Rights Reserved.</p>
+            <p class="text-sm mt-2">Information is power. Use it wisely.</p>
+        </div>
+    </footer>
+
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Consolidated JavaScript Application Logic -->
+    <script type="module">
+        // --- CONSOLIDATED SCRIPT FROM data.js, ui.js, chart_config.js, and main.js ---
+
+        // ========================================================================
+        // START: data.js content
+        // ========================================================================
+        const missionStatement = `To deploy comprehensive research capabilities to systematically expose, document, and create actionable intelligence to dismantle the corrupt, abusive, and racist US juvenile justice system that is torturing children. Children are priority #1. Every kid deserves protection from this system.`;
+
+        const masterReport = {
+            title: "Master Intelligence Report",
+            icon: "file-text",
+            content: `
+        <div class="prose-custom">
+        <h3>EXECUTIVE ASSESSMENT</h3>
+        <p>The American juvenile justice system is not broken; it is operating with brutal efficiency according to its underlying design. It is a system engineered for social control and financial profit, sustained by political corruption and built upon a foundation of racial inequity. This is not a series of isolated failures but a cohesive, interconnected architecture of injustice.</p>
+        <p>This Master Intelligence Report synthesizes multi-source intelligence to provide a unified analysis of this architecture. It is structured in three parts:</p>
+        <ol>
+            <li><strong>The Architecture of a Corrupt System:</strong> Deconstructs the financial, political, and racial drivers that incentivize incarceration.</li>
+            <li><strong>The Human Cost: A System of Abuse and Illegality:</strong> Documents the direct consequences of this architecture—the pervasive violence, neglect, and unconstitutional practices inflicted upon children.</li>
+            <li><strong>The Path Forward: Strategic Levers for Transformation:</strong> Outlines the proven models for reform, the assets for narrative warfare, and the coalition of allies necessary for victory.</li>
+        </ol>
+        <p>The core finding is that the system's profound human and financial costs are not only morally indefensible but also fiscally unsustainable. The successful, data-backed alternatives are not just more humane—they are cheaper and produce superior public safety outcomes. This confluence of moral crisis, legal liability, and economic irrationality creates an unprecedented strategic opportunity. This report provides the foundational intelligence for the next operational phase: creating target lists and action frameworks to dismantle this system.</p>
+        
+        <hr class="my-8 border-gray-700">
+
+        <h2>PART I: THE ARCHITECTURE OF A CORRUPT SYSTEM</h2>
+        <p>The system's failures are not accidental. They are the predictable outcomes of a market where children are commodities and incarceration is a product. This section dissects the three core pillars of this architecture: profit, racial bias, and political influence.</p>
+
+        <h3>1.1 The Profit Motive: Following the Money</h3>
+        <p>The engine of the juvenile justice system is a profit motive that actively works against rehabilitation. The most infamous example remains the <strong>"Kids for Cash"</strong> scandal in Pennsylvania, where two judges accepted <strong>$2.6 million in kickbacks</strong> to sentence thousands of children to private facilities. This was not an anomaly but an illustration of the system's core logic.</p>
+        
+        <h4>The Political Influence Engine</h4>
+        <p>Private prison corporations invest millions annually to shape policy and secure a steady flow of "customers." This is not about public safety; it is about shareholder value.</p>
+        <table>
+            <thead><tr><th>Corporation</th><th>Political Contributions (2023-2024 Cycle)</th><th>Lobbying Expenditure (2024)</th><th>Primary Tactic</th></tr></thead>
+            <tbody>
+                <tr><td><strong>GEO Group</strong></td><td>> $2,200,000</td><td>$1,380,000</td><td>Target key legislators and pro-incarceration PACs to maintain contracts and block reform.</td></tr>
+                <tr><td><strong>CoreCivic Inc.</strong></td><td>> $650,000</td><td>$1,770,000</td><td>Fund model legislation via proxies like ALEC to promote "tough on crime" laws that increase detention rates.</td></tr>
+            </tbody>
+        </table>
+
+        <h4>The Broader Profiteering Supply Chain</h4>
+        <p>Beyond facility operators, a parasitic ecosystem of over 4,100 corporations extracts wealth from incarcerated youth and their families. This network entrenches the carceral economy and diffuses accountability.</p>
+        <table>
+            <thead><tr><th>Service Sector</th><th>Key Players</th><th>Business Model & Connection to Abuse</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Healthcare</strong></td><td>Wellpath, Corizon, Centurion</td><td>Secure multi-million dollar state contracts, then maximize profit by systemically under-delivering care, leading to the medical and mental health neglect documented in Part II.</td></tr>
+                <tr><td><strong>Telecommunications</strong></td><td>Global Tel Link (GTL), Securus</td><td>Monopolize communication services, charging exorbitant fees that isolate youth from family support—a critical factor for rehabilitation.</td></tr>
+                <tr><td><strong>Food Services</strong></td><td>Aramark, Sodexo</td><td>Provide low-quality, low-cost food under lucrative contracts, contributing to the unsanitary and degrading conditions found in facilities.</td></tr>
+            </tbody>
+        </table>
+        <blockquote><strong>Strategic Synthesis:</strong> The drive for profit is the <em>direct cause</em> of the systemic abuse detailed in Part II. Understaffing, denial of medical care, and squalid conditions are not oversights; they are cost-control measures. Every dollar saved on a child's well-being is a dollar added to a corporation's bottom line.</blockquote>
+
+        <h3>1.2 The Foundation of Racial Inequity</h3>
+        <p>Racial disparity is a design feature, not a bug. The system functions as a modern mechanism for racial control, disproportionately targeting, criminalizing, and harming youth of color at every stage.</p>
+        
+        <h4>The School-to-Prison Pipeline: The System's Entry Point</h4>
+        <p>Schools in under-resourced communities are the primary recruiting grounds.<blockquote>"Black students constituted... 31.6% of arrests in school settings, despite being only 15.1% of student enrollment nationally." - <em>ACLU</em></blockquote>This is driven by zero-tolerance policies, over-policing, and a lack of counselors, which criminalize normal adolescent behavior for youth of color.</p>
+        
+        <h4>Manifestations of Systemic Bias</h4>
+        <p>Once in the system, disparity compounds. The data is damning.</p>
+        <table>
+            <thead><tr><th>Racial Group</th><th>Likelihood of Incarceration vs. White Youth</th><th>Share of U.S. Youth Population</th><th>Share of Incarcerated Youth Population</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Black Youth</strong></td><td><strong>4.7x more likely</strong></td><td>15%</td><td>42%</td></tr>
+                <tr><td><strong>American Indian/Alaska Native Youth</strong></td><td>3.1x more likely</td><td>1%</td><td>3%</td></tr>
+                <tr><td><strong>White Youth</strong></td><td>Baseline (1.0x)</td><td>51%</td><td>34%</td></tr>
+            </tbody>
+        </table>
+        <blockquote><strong>Strategic Synthesis:</strong> This disparity is not just statistical; it dictates who suffers the most. Youth of color are more likely to be sent to adult court, receive inadequate legal defense, and be subjected to the harshest practices like <strong>illegal solitary confinement</strong>. The violence and neglect documented in Part II are disproportionately inflicted upon Black and Brown children.</blockquote>
+
+        <h3>1.3 The Political & Legislative Battlefield</h3>
+        <p>Progress toward reform is fragile, constantly under assault from the political and financial interests that benefit from the status quo.</p>
+        <ul>
+            <li><strong>Federal Landscape:</strong> While the <strong>Biden Administration</strong> has pledged ~$1 billion for reform and the <strong>JJDPA</strong> provides a framework, federal oversight remains weak, especially after being scaled back under the Trump administration.</li>
+            <li><strong>State-Level Conflicts:</strong> Reform wins in states like <strong>Kansas, Georgia, and Connecticut</strong> (closing prisons, reinvesting funds) are perpetually threatened. Pro-incarceration legislators in states like <strong>Michigan</strong> push for stricter sentencing, and in Kansas, promised reinvestment funds were later diverted, demonstrating the political vulnerability of reform.</li>
+            <li><strong>Public Opinion:</strong> Recent ballot initiatives show a conflicted public. While voters in <strong>Nevada</strong> supported ending forced labor, voters in <strong>Colorado</strong> passed "tough on crime" measures to fund law enforcement and increase mandatory minimums. This reveals a risk-averse sentiment that can be exploited by opponents of reform.</li>
+        </ul>
+
+        <hr class="my-8 border-gray-700">
+
+        <h2>PART II: THE HUMAN COST - A SYSTEM OF ABUSE AND ILLEGALITY</h2>
+        <p>The architecture described in Part I manifests as a state-sanctioned campaign of terror against children. Facilities designed for profit and control become environments of pervasive violence, neglect, and systemic illegality.</p>
+        
+        <h3>2.1 The Environment of Violence and Neglect</h3>
+        <p>The physical conditions of many juvenile facilities are an indictment of the system. Chronic understaffing and overcrowding—direct results of cost-cutting—create a powder keg.</p>
+        <ul>
+            <li><strong>Dehumanizing Conditions:</strong> Investigations document facilities plagued by rodent infestations, repeated sewage floods, and general squalor.</li>
+            <li><strong>Staff-Perpetrated Violence:</strong> This is not a case of a few "bad apples." It is institutionalized.
+                <ul>
+                    <li>A Bureau of Justice Statistics report found <strong>657 substantiated incidents of staff-on-youth sexual victimization</strong> over a five-year period.</li>
+                    <li>In California, 30 officers were charged with orchestrating <strong>"gladiator fights"</strong> among detainees.</li>
+                    <li>In Georgia, juvenile facilities have the <strong>highest rates of sexual abuse in the nation</strong>.</li>
+                </ul>
+            </li>
+            <li><strong>Systemic Neglect:</strong> Medical and mental health care are functionally non-existent.
+                <ul>
+                    <li>Over <strong>70%</strong> of detained youth have a diagnosable mental disorder.</li>
+                    <li>A shocking <strong>75% of facilities fail to meet minimum suicide prevention standards</strong>.</li>
+                    <li>The system criminalizes mental illness, as families are often forced to relinquish custody simply to access care.</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h3>2.2 Pervasive Constitutional and Statutory Violations</h3>
+        <p>The system operates in open defiance of U.S. law and Supreme Court precedent.</p>
+        <ul>
+            <li><strong>Illegal Solitary Confinement:</strong> Despite being banned for punitive use in <strong>29 states</strong>, facilities routinely use prolonged isolation, causing profound psychological damage. This practice is disproportionately used on youth of color and LGBTQ youth.</li>
+            <li><strong>Violation of <em>Miranda</em> & <em>Gault</em> Rights:</strong> The right to counsel is a fiction for many.
+                <blockquote>"Many courts continue to operate in a 'pre-Gault mode,' often viewing defense attorneys as irrelevant or unnecessary."</blockquote>
+            </li>
+            <li>Adolescents waive their <em>Miranda</em> rights at a <strong>90% rate</strong>, a direct result of developmental vulnerability and coercive interrogation tactics.</li>
+            <li>In many jurisdictions, lawyers are appointed too late or are saddled with crushing caseloads, rendering their presence meaningless. This was a key element of the "Kids for Cash" scheme.</li>
+        </ul>
+
+        <h3>2.3 The Financial and Legal Implosion</h3>
+        <p>Decades of systemic abuse have created a tidal wave of legal liability that threatens to bankrupt state and local governments. This is a critical leverage point.</p>
+        <table>
+            <thead><tr><th>Jurisdiction</th><th>Nature of Lawsuit(s)</th><th>Status / Financial Impact</th><th>Strategic Implication</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Los Angeles County, CA</strong></td><td>Widespread sexual abuse claims</td><td><strong>$4 Billion Tentative Settlement</strong></td><td>A record-setting figure demonstrating the staggering financial consequence of institutional failure.</td></tr>
+                <tr><td><strong>State of Maryland</strong></td><td>Systemic sexual abuse</td><td><strong>Over 3,500 active lawsuits</strong></td><td>New victim protection laws have unleashed a flood of claims, forcing the state to cap future liabilities.</td></tr>
+                <tr><td><strong>King County, WA</strong></td><td>Staff sexual abuse over decades</td><td><strong>Active Lawsuit</strong></td><td>Alleges a 40-year pattern of rape, molestation, and grooming by guards and staff.</td></tr>
+                <tr><td><strong>New York City, NY</strong></td><td>Sexual abuse in juvenile centers</td><td><strong>Over 500 active cases</strong></td><td>Exposes deep-rooted, long-term abuse within the city's system.</td></tr>
+            </tbody>
+        </table>
+        <blockquote><strong>Strategic Synthesis:</strong> The system is imploding under the weight of its own criminality. The staggering financial settlements are not just reparations; they are proof that the status quo is unsustainable. This provides a powerful, non-ideological argument for change that can appeal to fiscal conservatives and taxpayers.</blockquote>
+
+        <hr class="my-8 border-gray-700">
+
+        <h2>PART III: THE PATH FORWARD - STRATEGIC LEVERS FOR TRANSFORMATION</h2>
+        <p>The crisis, while severe, is not insurmountable. A clear, data-backed pathway to reform and abolition exists. It requires dismantling the old architecture and strategically investing in a new ecosystem of care, all while winning the public narrative.</p>
+
+        <h3>3.1 The Economic and Moral Imperative for De-incarceration</h3>
+        <p>The most powerful argument against the current system is the stark contrast between its cost and its outcomes.</p>
+        <table>
+            <thead><tr><th>Metric</th><th>Secure Youth Detention</th><th>Community-Based Alternatives</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Average Annual Cost Per Youth</strong></td><td><strong>$214,620</strong></td><td><strong>$5,000 - $10,000</strong></td></tr>
+                <tr><td><strong>Public Safety Outcomes</strong></td><td>Higher rates of recidivism; causes trauma.</td><td><strong>Lower rates of re-arrest</strong>; improved life outcomes.</td></tr>
+            </tbody>
+        </table>
+
+        <h4>Proven State & Local Models:</h4>
+        <ul>
+            <li><strong>Virginia:</strong> Proved the model of closing large youth prisons and reinvesting the massive savings into a statewide continuum of effective community-based programs.</li>
+            <li><strong>Clayton County, GA:</strong> Judge Steven Teske's collaborative model drastically cut school-based arrests, proving the school-to-prison pipeline can be dismantled at its source.</li>
+            <li><strong>Miami-Dade County, FL:</strong> A data-driven 24/7 assessment center led to better diversion decisions and a <strong>23% decrease in juvenile arrests</strong>.</li>
+        </ul>
+
+        <h3>3.2 The Arsenal of Alternatives</h3>
+        <p>Effective, evidence-based alternatives are not theoretical; they are operational and scalable. They represent the tactical replacement for the failed model of incarceration.</p>
+        <table>
+            <thead><tr><th>Alternative Model</th><th>Mechanics</th><th>Evidence of Superiority</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Credible Messenger Mentoring</strong></td><td>Utilizes mentors with lived experience to provide intensive, culturally-responsive support, building trust that traditional services cannot.</td><td>High efficacy in reducing reoffending at a fraction of the cost of a detention bed. A key asset in our coalition.</td></tr>
+                <tr><td><strong>Restorative Justice</strong></td><td>Shifts focus from punishment to repairing harm, bringing youth, victims, and community together to foster accountability and healing.</td><td>Proven to reduce recidivism by addressing root causes of conflict and empowering communities to solve their own problems.</td></tr>
+                <tr><td><strong>Wraparound & Therapeutic Services</strong></td><td>Provides intensive, in-home support (e.g., Multisystemic Therapy - MST) to address underlying family dynamics and trauma.</td><td>One of the most rigorously researched and validated interventions for preventing out-of-home placement and reducing recidivism in high-risk youth.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>3.3 Winning the Narrative War</h3>
+        <p>Controlling the public narrative is a critical objective. We must shift the media focus from fear-based crime reporting to solutions-oriented coverage of the system's failure and the success of alternatives.</p>
+        <h4>Key Assets:</h4>
+        <ul>
+            <li><strong>Investigative Journalists & Outlets:</strong> Melanie Perkins McLaughlin (<code>Open Investigation</code>), Reveal (<code>Juvenile (in)justice</code>), and Carnegie-Knight News21 (<code>Kids Imprisoned</code>) are crucial allies in exposing the truth.</li>
+            <li><strong>Podcasts as a Strategic Tool:</strong> This medium is essential for reaching diverse audiences with deep-dive, narrative-driven content that can humanize victims, educate policymakers, and expose systemic corruption.</li>
+            <li><strong>Lived Experience Voices:</strong> Organizations like Represent Justice and Justice for Families are vital for centering the stories of those most impacted, building public empathy, and reducing stigma.</li>
+        </ul>
+
+        <h3>3.4 The Coalition: Allies and Leverage Points</h3>
+        <p>Success requires a broad, synchronized coalition capable of advocacy on all fronts—policy, legal, community, and media. This coalition provides the strategic counterbalance to the political and corporate networks sustaining the current system.</p>
+        <h4>Key Reform Leaders:</h4>
+        <ul>
+            <li><strong>Judiciary:</strong> <strong>Judge Steven Teske (GA)</strong> provides national leadership and a blueprint for reform from within the system.</li>
+            <li><strong>Law Enforcement:</strong> A cohort of reform-minded police chiefs (e.g., <strong>Ronald Davis, Edward Flynn</strong>) provide "tough on crime" credibility to "smart on crime" solutions, neutralizing a key opposition talking point.</li>
+        </ul>
+
+        <h4>The Advocacy Ecosystem:</h4>
+        <table>
+            <thead><tr><th>Category</th><th>Key Organizations</th><th>Strategic Role</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Policy & System Architects</strong></td><td>The Annie E. Casey Foundation, The Sentencing Project, Youth First</td><td>Drive the national policy agenda, produce foundational research, and coordinate campaigns to close youth prisons.</td></tr>
+                <tr><td><strong>On-the-Ground Implementers</strong></td><td>Youth Advocate Programs (YAP), Credible Messenger Mentoring Movement</td><td>Build and scale the community-based alternatives, proving the model works in practice.</td></tr>
+                <tr><td><strong>Legal & Constitutional Defenders</strong></td><td>Juvenile Law Center, The Gault Center, Center for Children's Law and Policy</td><td>Wield litigation and policy advocacy as a weapon to challenge unconstitutional practices and defend youth rights.</td></tr>
+                <tr><td><strong>Narrative & Empowerment</strong></td><td>Represent Justice, Anti-Recidivism Coalition (ARC), Justice for Families</td><td>Mobilize system-impacted individuals as the most powerful messengers for change.</td></tr>
+            </tbody>
+        </table>
+        </div>`,
+        };
+
+        const texasBriefing = {
+            title: "Texas Actionable Intelligence Report",
+            icon: "map-pin",
+            content: `
+            <div class="prose-custom">
+                <p class="text-sm text-gray-500">Document ID: A-801-TX-FINAL<br>Date: June 22, 2025<br>Classification: FOR IMMEDIATE DISTRIBUTION</p>
+                <h3 class="mt-6">Executive Summary & Key Judgements</h3>
+                <p>This report synthesizes intelligence on the Texas juvenile justice system to provide a unified strategic framework for reform advocates, legal teams, and journalists. Our analysis confirms a system in a state of profound crisis, defined by four core realities:</p>
+                <ol>
+                    <li><strong>Federally Confirmed Systemic Abuse:</strong> In August 2024, the U.S. Department of Justice (DOJ) declared conditions in all five state-run juvenile facilities unconstitutional. The findings detail a pervasive culture of abuse, excessive force, illegal solitary confinement, and systemic medical and educational neglect.</li>
+                    <li><strong>State-Level Denial vs. Legislative Concern:</strong> The Texas Juvenile Justice Department (TJJD) leadership is engaged in a public campaign of denial, actively disputing the DOJ's findings. This official narrative directly contradicts the evidence and obstructs meaningful reform, creating a significant credibility gap.</li>
+                    <li><strong>Financial Influence Driving Expansion:</strong> Private prison corporations (The GEO Group, CoreCivic) are major financial donors to key Texas politicians. This financial influence coincides with a recent $200 million legislative appropriation for two new juvenile prisons, revealing a powerful incentive to expand a system the federal government has deemed broken.</li>
+                    <li><strong>Deep-Seated Racial Inequity:</strong> The system is built on a foundation of extreme racial disparity. Black youth are incarcerated at nearly five times the rate of white youth, a crisis driven primarily by the school-to-prison pipeline, which disproportionately funnels minority students into the justice system for discretionary offenses.</li>
+                </ol>
+                <p>This report moves from an analysis of these core problems to a concrete, actionable plan designed to drive systemic change.</p>
+
+                <hr class="my-8 border-gray-700">
+
+                <h2 class="text-2xl">Part 1: Situational Analysis & Intelligence Findings</h2>
+                
+                <h4 class="mt-4">A. Systemic Crisis: Unconstitutional Conditions & State Denial</h4>
+                <p>The core of the Texas crisis is the conflict between federally documented reality and the state agency's public narrative. The DOJ's August 2024 findings are unambiguous:</p>
+                <blockquote><em>"Justice Department finds Texas juvenile detention centers violated ... widespread abuse, neglect, and systemic failures that severely harmed the youth in custody."</em><br>— The Texas Tribune, August 1, 2024</blockquote>
+                <h5>Summary of DOJ Findings:</h5>
+                <ul>
+                    <li><strong>Pervasive Violence & Abuse:</strong> Routine use of excessive force, overuse of pepper spray, and dangerous physical restraints by staff. The report details a "pervasive atmosphere of sexual abuse, grooming and lack of staff accountability."</li>
+                    <li><strong>Systemic Neglect:</strong> Systemic failure to provide adequate mental health care for the ~65% of youth with significant needs and a failure to provide appropriate education, violating the Individuals with Disabilities Education Act (IDEA) and Americans with Disabilities Act (ADA).</li>
+                    <li><strong>Illegal Solitary Confinement:</strong> The use of isolation was found to be unconstitutional, exposing children to "excessive periods" of isolation that inflict significant psychological harm.</li>
+                </ul>
+                <p>Despite this, TJJD leadership maintains the problems are resolved, attributing them to a past staffing crisis. This denialism is the primary obstacle to remediation, as it frames the agency itself as an impediment to child safety and constitutional compliance.</p>
+
+                <h4 class="mt-8">B. Financial Influence Networks & The Push for Expansion</h4>
+                <p>Financial influence in this system operates through sophisticated political lobbying and campaign contributions, creating a powerful incentive to perpetuate and expand incarceration.</p>
+                 <table>
+                    <thead><tr><th>Entity</th><th>Type</th><th>Financial Influence Summary</th></tr></thead>
+                    <tbody>
+                        <tr><td>The GEO Group</td><td>Private Prison Corp.</td><td>Donated <strong>$1.09 million</strong> (2016-17) in Texas; a major federal donor and lobbyist.</td></tr>
+                        <tr><td>CoreCivic</td><td>Private Prison Corp.</td><td>Donated <strong>$533k</strong> (2016-17) in Texas; a significant federal donor and lobbyist.</td></tr>
+                    </tbody>
+                </table>
+                <h5>Analysis:</h5>
+                <p>The primary vector of influence is not direct payment for child placement but strategic investment in political figures who control policy and budgets. The decision by the Texas Legislature to approve <strong>$200 million for two new state-run juvenile prisons</strong> cannot be disconnected from these financial relationships. This action prioritizes the construction of new carceral spaces over the reform of existing, unconstitutional ones, directly aligning with the business interests of private prison corporations who profit from incarceration.</p>
+
+                <h4 class="mt-8">C. Foundational Inequity: The School-to-Prison Pipeline</h4>
+                <p>Racial disparities are the defining feature of the Texas juvenile justice system, with roots in the state's public education system.</p>
+                <h5>Disparity by the Numbers (2021 Data):</h5>
+                <table>
+                    <thead><tr><th>Youth Group</th><th>Incarceration Rate (per 100,000)</th><th>Disparity vs. White Youth</th></tr></thead>
+                    <tbody>
+                        <tr><td>Black Youth</td><td>228</td><td><strong>4.7x Higher</strong></td></tr>
+                        <tr><td>White Youth</td><td>49</td><td>Baseline</td></tr>
+                    </tbody>
+                </table>
+                <p>The primary driver is the school-to-prison pipeline. Analysis shows that 97% of school punishments are for discretionary offenses (e.g., "disruptive behavior"), not mandatory ones. Implicit bias among educators and school police leads to Black and Latino students being disproportionately punished and referred to the justice system for the same behaviors as their white peers. Any reform effort focused solely on detention facilities is destined to fail, as it ignores the systemic feeder mechanism.</p>
+
+                <h4 class="mt-8">D. Legal Landscape: Systemic Violations & Legislative Response</h4>
+                <p>The Texas system is in a state of internal legal conflict. The executive branch (TJJD) operates facilities in violation of the Constitution, while the legislative branch has passed laws to stop these practices.</p>
+                <h5>The Reform Law: House Bill 31 (Effective September 1, 2025)</h5>
+                <p>This landmark legislation directly confronts the system's worst practices:</p>
+                <ul>
+                    <li><strong>Restricts Solitary Confinement:</strong> Strictly limits its use to cases of <em>immediate physical risk</em> and only after all less restrictive options fail.</li>
+                    <li><strong>Reforms Sentencing:</strong> Introduces "mitigating evidence" (e.g., youthfulness) and creates a legal <em>presumption against</em> transferring children to the adult system.</li>
+                </ul>
+                <p>The critical question is one of enforcement. The agency responsible for implementing HB 31 is the same one that denies the existence of the problems the law was written to solve. This sets the stage for a major compliance battle.</p>
+
+                <hr class="my-8 border-gray-700">
+                
+                <h2 class="text-2xl">Part 2: Actionable Intelligence: Targets & Strategies</h2>
+                <p>This section outlines a coordinated strategy for accountability, leveraging the intelligence findings to drive systemic change.</p>
+                
+                <h4 class="mt-4">A. Priority Focus Areas</h4>
+                <p>The following entities and individuals have been identified for focused accountability campaigns due to their central role in the system's failures.</p>
+                <h5>State Facilities & Agencies</h5>
+                <table>
+                    <thead><tr><th>Focus Area</th><th>Rationale for Accountability</th></tr></thead>
+                    <tbody>
+                        <tr><td>All Five State-Run Juvenile Facilities</td><td>Declared <strong>unconstitutional</strong> by the DOJ. They are the epicenter of systemic abuse, neglect, and illegal practices.</td></tr>
+                        <tr><td>Texas Juvenile Justice Department (TJJD) Leadership</td><td>Engaged in a campaign of <strong>denial</strong>, obstructing reform, misleading the public, and perpetuating harm to children in state custody.</td></tr>
+                    </tbody>
+                </table>
+                <h5 class="mt-6">Politicians & Public Officials</h5>
+                <table>
+                    <thead><tr><th>Focus Area</th><th>Rationale for Accountability</th></tr></thead>
+                    <tbody>
+                        <tr><td>Legislators Supporting the $200M Prison Appropriation</td><td>Championed the expansion of an unconstitutional system, prioritizing incarceration over reform and aligning with private prison interests.</td></tr>
+                        <tr><td>Senator John Cornyn</td><td>A key recipient of <strong>GEO Group</strong> campaign funds whose influence on federal judicial appointments and funding warrants scrutiny.</td></tr>
+                        <tr><td>Representative Henry Cuellar</td><td>A prominent recipient of <strong>GEO Group</strong> funds whose legislative record on appropriations should be examined for alignment with industry interests.</td></tr>
+                    </tbody>
+                </table>
+                <h5 class="mt-6">Corporations & Financial Interests</h5>
+                 <table>
+                    <thead><tr><th>Focus Area</th><th>Rationale for Accountability</th></tr></thead>
+                    <tbody>
+                        <tr><td>The GEO Group</td><td>A primary financial force (<strong>$1.09M+</strong> in donations) promoting the expansion of the prison system for its own profit.</td></tr>
+                        <tr><td>CoreCivic</td><td>A major donor (<strong>$533k+</strong>) representing the broader corporate interest in maintaining and expanding carceral systems.</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 class="mt-8">B. Strategic Recommendations</h4>
+                <p>The following are integrated strategies for legislative, legal, and public action.</p>
+                <h5>1. Legislative Advocacy</h5>
+                <ul>
+                    <li><strong>Enforce the Reform Law (HB 31):</strong> Establish an independent, third-party monitoring body to audit TJJD's compliance with the new law. Demand monthly public reporting from TJJD on all instances of seclusion to the legislative oversight committee. Arm lawmakers with data to directly challenge TJJD's compliance in oversight hearings.</li>
+                    <li><strong>Impose a Moratorium on New Prison Construction:</strong> Launch a "Treatment, Not Concrete" legislative campaign to halt the $200 million construction plan. Introduce a budget rider freezing construction funds until existing facilities meet constitutional standards. Draft legislation to re-allocate the $200 million to community-based mental health services and smaller, therapeutic centers.</li>
+                    <li><strong>Dismantle the School-to-Prison Pipeline:</strong> Introduce legislation to eliminate discretionary punishments that disproportionately affect Black and Latino students. Lobby for state funding to replace School Resource Officers (SROs) with counselors and behavioral health specialists. Mandate public reporting of all school disciplinary actions, broken down by race, gender, and disability status.</li>
+                </ul>
+                <h5 class="mt-6">2. Legal Challenges</h5>
+                <ul>
+                    <li><strong>Launch Systemic Civil Rights Litigation:</strong> File a federal class-action lawsuit against the State of Texas and TJJD on behalf of all youth in state custody. Base claims on the <strong>Eighth Amendment</strong> (cruel and unusual punishment) and <strong>Fourteenth Amendment</strong> (due process violations) using the DOJ's findings as an evidentiary foundation.</li>
+                    <li><strong>Target Educational Neglect (IDEA/ADA Violations):</strong> File a separate lawsuit focused on the state's failure to provide a "Free Appropriate Public Education" (FAPE) for youth with disabilities, a specific violation identified by the DOJ.</li>
+                    <li><strong>Prepare for HB 31 Enforcement Litigation:</strong> Establish a rapid-response legal team to represent the first children illegally placed in solitary confinement after September 1, 2025. Immediate legal action will demonstrate vigilant oversight.</li>
+                </ul>
+                <h5 class="mt-6">3. Public Awareness Campaigns</h5>
+                 <ul>
+                    <li><strong>"Who Do You Believe?" - The Denial vs. Reality Campaign:</strong> Erode TJJD leadership's credibility by creating media that contrasts their denials with direct quotes from the damning DOJ report. Feature testimony from former staff, youth, and families to validate the federal findings. Frame the central question for the public: <em>"Why is our state agency denying a federally-documented crisis?"</em></li>
+                    <li><strong>"Follow the Prison Profits" - The Financial Influence Campaign:</strong> Publish a digestible report tracing campaign contributions from The GEO Group and CoreCivic to key politicians. Run targeted digital ads in the districts of legislators who voted for the new prisons after taking industry money. Frame the $200 million appropriation as a corporate handout that prioritizes profits over children's safety.</li>
+                    <li><strong>"The Pipeline Starts Here" - The Racial Justice Campaign:</strong> Shift the public conversation from prisons to schools, partnering with racial justice and parent groups. Use data visualizations to show how Black and Latino youth are disproportionately funneled into the system. Promote stories that humanize the affected youth, focusing on the systemic failures that led them into the justice system.</li>
+                </ul>
+
+            </div>
+            `
+        };
+
+        const texasRacialDisparityData = {
+            labels: ['Black Youth', 'White Youth'],
+            datasets: [{
+                label: 'Incarceration Rate per 100,000 (2021)',
+                data: [228, 49],
+                backgroundColor: [
+                    'rgba(185, 28, 28, 0.6)',
+                    'rgba(209, 213, 219, 0.6)',
+                ],
+                borderColor: [
+                    'rgba(185, 28, 28, 1)',
+                    'rgba(209, 213, 219, 1)',
+                ],
+                borderWidth: 2
+            }]
+        };
+
+        const priorityTargets = {
+            title: "Priority Targets",
+            icon: "crosshair",
+            intro: "This section identifies key entities—facilities, political actors, and corporations—that are critical targets for intervention, accountability campaigns, and legal action. The targeting rationale is derived directly from intelligence on systemic abuse, corruption, and profit-driven malfeasance.",
+            facilities: [
+                {
+                    name: "Los Angeles County, CA Juvenile Facilities",
+                    rationale: "Site of widespread, systemic sexual abuse resulting in a catastrophic <strong>$4 Billion tentative settlement</strong>. This financial vulnerability makes it a high-leverage target for forcing operational change.",
+                },
+                {
+                    name: "State of Georgia Juvenile Facilities",
+                    rationale: "Possess the <strong>highest rates of sexual abuse in the nation</strong>. This systemic failure presents a clear target for federal investigation, class-action lawsuits, and public pressure campaigns.",
+                },
+                {
+                    name: "California State Juvenile Facilities (General)",
+                    rationale: "Documented instances of staff-orchestrated violence (\"gladiator fights\"), indicating a deeply ingrained culture of abuse and impunity among corrections officers.",
+                },
+                {
+                    name: "State of Maryland Juvenile Facilities",
+                    rationale: "Facing over <strong>3,500 active lawsuits</strong> for systemic sexual abuse. The sheer volume of claims provides an opportunity to overwhelm the state's legal and financial resources, compelling systemic reform.",
+                },
+                {
+                    name: "King County, WA Juvenile Detention",
+                    rationale: "Subject of an active lawsuit alleging a <strong>40-year pattern of rape, molestation, and grooming</strong> by staff, indicating deeply entrenched, multi-generational institutional failure.",
+                },
+                {
+                    name: "New York City, NY Juvenile Centers",
+                    rationale: "Facing over <strong>500 active sexual abuse cases</strong>, demonstrating long-term, systemic issues within a major metropolitan system.",
+                },
+            ],
+            politicians: [
+                {
+                    profile: "State Legislators Receiving Funds from Prison Lobbies",
+                    jurisdiction: "States with high private prison presence (e.g., FL, TX, AZ) and states where reform is contested (e.g., MI).",
+                    rationale: "These legislators are direct conduits for corporate influence. Campaigns should focus on publicizing their financial ties to GEO Group and CoreCivic, framing their \"tough on crime\" votes as corrupt, for-profit policy.",
+                },
+                {
+                    profile: '"Tough on Crime" Legislators Blocking Reform',
+                    jurisdiction: "<strong>Michigan</strong>, <strong>Colorado</strong>, and other states pushing for harsher sentencing or mandatory minimums.",
+                    rationale: "These actors are vulnerable to narrative campaigns that contrast their expensive, failed policies with the cheaper, more effective community-based alternatives proven in states like Virginia and Georgia.",
+                },
+                {
+                    profile: "State Officials Diverting Reinvestment Funds",
+                    jurisdiction: "<strong>Kansas</strong> and other states where promised savings from prison closures have been redirected away from community programs.",
+                    rationale: "Target with audits and media investigations to expose the broken promises. This undermines their fiscal credibility and demonstrates that reform requires vigilant oversight.",
+                }
+            ],
+            corporations: [
+                {
+                    name: "GEO Group",
+                    role: "A primary private prison operator that invests heavily in political lobbying (`>$2.2M`) to maintain contracts and block reform legislation, ensuring a steady flow of incarcerated youth.",
+                },
+                {
+                    name: "CoreCivic Inc.",
+                    role: "A primary private prison operator that funds proxy groups like ALEC to promote model legislation that increases detention rates, directly fueling the school-to-prison pipeline.",
+                },
+                {
+                    name: "Wellpath, Corizon, Centurion",
+                    role: "Healthcare providers that secure state contracts and then systemically deny medical and mental health care as a cost-control measure, directly causing neglect, suffering, and death.",
+                },
+                {
+                    name: "Global Tel Link (GTL), Securus",
+                    role: "Telecommunications monopolists that charge exorbitant fees for phone calls, isolating youth from their families and undermining a critical factor for successful rehabilitation.",
+                },
+                {
+                    name: "Aramark, Sodexo",
+                    role: "Food service contractors that provide low-quality, often unsanitary food to maximize profit, contributing to the degrading and unhealthy conditions documented in facilities.",
+                },
+            ]
+        };
+
+        const actionFrameworks = {
+            title: "Action Frameworks",
+            icon: "play-circle",
+            content: `
+            <div class="prose-custom">
+            <h3><strong>Framework 1: High-Risk Facility Accountability</strong></h3>
+            <p><strong>Objective:</strong> To expose priority facilities as centers of abuse and financial liability, creating overwhelming public and political pressure to close them and terminate contracts with abusive service providers.</p>
+            <table>
+                <thead><tr><th>Phase</th><th>Action Steps & Strategic Rationale</th><th>Intelligence & Resources</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Phase 1: Investigation & Narrative Framing</strong></td>
+                        <td><strong>1. Launch Coordinated Media Offensive:</strong><br>- Partner with investigative journalists (<em>Reveal</em>, <em>Open Investigation</em>) to pitch targeted exposés on facilities with the most egregious records (e.g., GA for sexual abuse, LA for financial fallout).<br>- <strong>Narrative Focus:</strong> <em>"Taxpayer dollars are funding state-sanctioned child abuse that is bankrupting our county/state."</em><br><strong>2. Develop Public Campaign Materials:</strong><br>- Create infographics comparing the <strong>$214,620</strong> cost of a youth prison bed to the <strong>$5,000</strong> cost of community alternatives.<br>- Use social media to amplify stories of abuse and financial waste, using hashtags like <code>#Close[FacilityName]</code> and <code>#DollarsNotCells</code><br>- Partner with <em>Represent Justice</em> to center the stories of survivors from these facilities.</td>
+                        <td>- <strong>Financials:</strong> LA County's <strong>$4B settlement</strong>. <br>- <strong>Abuse Data:</strong> GA's highest national rate of sexual abuse; MD's 3,500 lawsuits; CA's "gladiator fights."<br>- <strong>Partners:</strong> Investigative Media, Narrative & Empowerment Groups.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 2: Legislative & Political Escalation</strong></td>
+                        <td><strong>1. Demand Legislative Hearings:</strong><br>- Leverage media coverage to pressure state legislative oversight committees to hold public hearings on facility conditions.<br>- Mobilize survivors and families to provide powerful public testimony.<br><strong>2. Advocate for Targeted Legislation:</strong><br>- Introduce bills to mandate unannounced third-party inspections of all juvenile facilities.<br>- Propose legislation that requires the cancellation of state contracts with any provider (e.g., Wellpath, Aramark) found to be systemically negligent.</td>
+                        <td>- <strong>Political Leverage:</strong> The sheer volume of lawsuits (MD, NYC) creates a fiscal imperative for politicians to act.<br>- <strong>Models:</strong> Use successful closure campaigns in VA and CT as proof of concept.<br>- <strong>Partners:</strong> Policy & System Architects (<em>The Annie E. Casey Fdn.</em>).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 3: Corporate & Community Action</strong></td>
+                        <td><strong>1. Focus on Facility Contractors:</strong><br>- Launch a public campaign demanding the local/state government terminate contracts with specific providers like <em>Wellpath</em>, <em>Aramark</em>, or <em>Sodexo</em> based on documented failures within the priority facility.<br><strong>2. Mobilize Local Community:</strong><br>- Organize protests and vigils outside the facility and at the offices of the responsible government officials (e.g., governor, county commissioners).<br>- Build coalitions with local teachers' unions, faith groups, and fiscal conservatives who oppose government waste.</td>
+                        <td>- <strong>Corporate Focus Areas:</strong> List of healthcare and food service contractors profiting from abuse.<br>- <strong>Community Models:</strong> Highlight the success of local alternatives (<em>YAP</em>, Credible Messengers) as the immediate replacement for the facility.<br>- <strong>Partners:</strong> On-the-Ground Implementers.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="mt-12"><strong>Framework 2: Corporate Accountability Focus</strong></h3>
+            <p><strong>Objective:</strong> To disrupt the business models of corporations profiting from youth incarceration, making them toxic assets for investors and political partners, and ultimately severing their financial and political influence.</p>
+            <table>
+                <thead><tr><th>Strategy</th><th>Action Steps & Strategic Rationale</th><th>Intelligence & Resources</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Media & Public Pressure</strong></td>
+                        <td><strong>1. Launch "Profiting from Pain" Campaign:</strong><br>- Create micro-sites and social media content dedicated to each corporate category (Private Prisons, Healthcare, Telecom).<br>- <strong>For GEO/CoreCivic:</strong> Expose the direct link between their lobbying (<code>>$2.2M</code>) and specific "tough on crime" bills. Frame them as enemies of fiscal responsibility and public safety.<br>- <strong>For Wellpath/Corizon:</strong> Publicize every instance of medical neglect leading to death or serious harm. Frame them as putting profits over children's lives.<br>- <strong>For GTL/Securus:</strong> Share stories of families driven into debt by exorbitant call rates. Frame their business model as anti-family and anti-rehabilitation.</td>
+                        <td>- <strong>Financial Data:</strong> GEO/CoreCivic lobbying expenditures.<br>- <strong>Corporate List:</strong> Wellpath, GTL, Aramark, etc.<br>- <strong>Narrative Link:</strong> Directly connect their profit-seeking behavior (cost-cutting) to the abuse documented in facilities (neglect, poor conditions).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Legislative & Political Action</strong></td>
+                        <td><strong>1. Introduce "Accountability" Legislation:</strong><br>- Lobby for state and federal laws to ban private prison contracts for youth facilities.<br>- Advocate for bills that regulate and cap the cost of prison telecom and commissary services.<br>- Push for stronger "Clean Government" laws that expose and limit the political influence of these corporations.<br><strong>2. Focus on Their Political Champions:</strong><br>- Use the political accountability framework (below) to focus on legislators who are the primary recipients of their campaign contributions.</td>
+                        <td>- <strong>Political Focus Areas:</strong> State legislators in FL, TX, AZ, MI.<br>- <strong>Policy Models:</strong> Legislation from other states that has successfully banned private prisons or regulated telecom costs.<br>- <strong>Partners:</strong> <em>The Sentencing Project</em>, <em>Youth First</em>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Direct Corporate Accountability</strong></td>
+                        <td><strong>1. Execute Divestment Campaigns:</strong><br>- Target the institutional investors (pension funds, university endowments, major banks) that hold stock in GEO Group, CoreCivic, and Wellpath's parent companies. Supply them with a "risk portfolio" detailing the legal liabilities and reputational damage associated with these holdings.<br><strong>2. Initiate Shareholder Activism:</strong><br>- Partner with ethical investment firms to file shareholder resolutions demanding human rights impact assessments, transparency on political spending, and reports on in-facility deaths or lawsuits.<br><strong>3. Disrupt Business Operations:</strong><br>- Organize protests at shareholder meetings, corporate headquarters, and industry conferences.</td>
+                        <td>- <strong>Financial Leverage:</strong> The massive lawsuit payouts (<strong>$4B in LA</strong>) demonstrate the material risk to investors.<br>- <strong>Allies:</strong> Collaborate with national divestment movements (e.g., those targeting fossil fuels) to share tactics and resources.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="mt-12"><strong>Framework 3: Political Accountability Focus</strong></h3>
+            <p><strong>Objective:</strong> To hold anti-reform politicians accountable by exposing their ties to the prison industry and their failed, fiscally irresponsible policies, creating a political cost for supporting youth incarceration.</p>
+            <table>
+                <thead><tr><th>Target Profile</th><th>Action Steps & Strategic Rationale</th><th>Intelligence & Resources</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Legislators Funded by Prison Lobbies</strong></td>
+                        <td><strong>1. Launch "Follow the Money" Media Campaign:</strong><br>- Create a public database and shareable social media graphics connecting specific legislators' campaign donations from GEO/CoreCivic to their votes on pro-incarceration bills.<br>- <strong>Narrative:</strong> <em>"Is your representative working for you, or for the private prison industry?"</em><br><strong>2. Direct Constituent Engagement:</strong><br>- Organize in-district town halls to publicly question these legislators about their financial ties.<br>- Run local ad campaigns highlighting their voting records in the lead-up to elections.</td>
+                        <td>- <strong>Data:</strong> List of politicians receiving funds from GEO Group and CoreCivic.<br>- <strong>Jurisdictions:</strong> FL, TX, AZ, MI.<br>- <strong>Partners:</strong> Local media outlets, good-government groups.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>"Tough on Crime" Reform Blockers</strong></td>
+                        <td><strong>1. Reframe the Debate: "Smart on Crime, Safe for Communities"</strong><br>- Counter their rhetoric with hard data. Contrast the high cost and poor recidivism rates of their proposed policies with the cheaper, more effective outcomes of community-based models (VA, GA).<br>- Enlist reform-minded law enforcement figures (like Judge Teske) to act as media surrogates, providing "tough on crime" credibility to "smart on crime" solutions.<br><strong>2. Electoral Challenge:</strong><br>- Identify and support credible primary and general election challengers who can run on a platform of fiscal responsibility and proven public safety solutions.</td>
+                        <td>- <strong>Economic Data:</strong> <strong>$214,620</strong> (detention) vs. <strong>$5,000</strong> (alternatives).<br>- <strong>Success Stories:</strong> VA, Clayton Co. GA, Miami-Dade FL.<br>- <strong>Credible Messengers:</strong> Judge Steven Teske, reform-minded police chiefs.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Officials Diverting Reinvestment Funds</strong></td>
+                        <td><strong>1. Initiate "Broken Promises" Audit & Media Campaign:</strong><br>- Partner with state auditors or investigative journalists to expose how funds saved from prison closures were diverted away from promised community investments.<br>- <strong>Narrative:</strong> <em>"They closed a prison to save money, then stole the savings from our community."</em><br><strong>2. Legal and Legislative Demands:</strong><br>- Demand legislative action to create locked-box funds or statutory mandates that guarantee savings are reinvested as promised. If malfeasance is found, explore potential legal action.</td>
+                        <td>- <strong>Focus:</strong> Kansas officials and similar cases.<br>- <strong>Strategy:</strong> This approach erodes public trust in these officials and demonstrates that reform requires vigilant oversight.<br>- <strong>Partners:</strong> Investigative Journalists, local community implementation groups who were promised the funding.</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            `,
+        };
+
+        const legalStrategies = {
+            title: "Legal Strategies",
+            icon: "gavel",
+            content: `
+            <div class="prose-custom">
+            <h3><strong>1. Class-Action Lawsuit: Unconstitutional Solitary Confinement</strong></h3>
+            <ul>
+                <li><strong>Legal Basis:</strong> Eighth Amendment (Cruel and Unusual Punishment); Fourteenth Amendment (Due Process and Equal Protection). The fact that <strong>29 states</strong> have already banned punitive solitary confinement for youth establishes a clear "evolving standard of decency." The disproportionate use on youth of color and LGBTQ youth provides a strong Equal Protection claim.</li>
+                <li><strong>Evidence Required:</strong>
+                    <ul>
+                        <li><strong>Facility Records:</strong> Isolation logs, incident reports, and staff rosters.</li>
+                        <li><strong>Victim Testimony:</strong> Depositions from youth detailing the conditions, duration, lack of human contact, and psychological impact.</li>
+                        <li><strong>Expert Testimony:</strong> Psychologists testifying on the unique and profound harm of isolation on the developing adolescent brain.</li>
+                        <li><strong>Systemic Data:</strong> Statistical evidence showing racial and identity-based disparities in the application of solitary confinement.</li>
+                    </ul>
+                </li>
+                <li><strong>Ideal Legal Partners:</strong> <strong>Juvenile Law Center</strong>, <strong>The Gault Center</strong>, <strong>Center for Children's Law and Policy</strong>, in collaboration with the <strong>ACLU</strong> and local civil rights attorneys. Partner with <strong>Represent Justice</strong> to identify and support plaintiffs.</li>
+            </ul>
+
+            <h3 class="mt-8"><strong>2. Systemic Lawsuit: Deliberate Indifference to Medical & Mental Health Needs</strong></h3>
+            <ul>
+                <li><strong>Legal Basis:</strong> Eighth Amendment (Deliberate Indifference to Serious Medical Needs, <em>Estelle v. Gamble</em>); Americans with Disabilities Act (ADA). This strategy can target both the state/county facility and the private healthcare contractor (e.g., Wellpath, Corizon).</li>
+                <li><strong>Evidence Required:</strong>
+                    <ul>
+                        <li><strong>Medical Records:</strong> A pattern of ignored medical requests, failure to provide prescribed medication, lack of mental health screening, and inadequate treatment plans.</li>
+                        <li><strong>Corporate Contracts:</strong> The contracts with private providers, which can reveal financial incentives to deny care.</li>
+                        <li><strong>Systemic Failures:</strong> The intelligence that <strong>70%</strong> of youth have a diagnosable mental disorder and <strong>75% of facilities fail minimum suicide prevention standards</strong>.</li>
+                        <li><strong>Tragic Outcomes:</strong> Coroner reports, internal investigations into suicides or deaths from untreated conditions.</li>
+                    </ul>
+                </li>
+                <li><strong>Ideal Legal Partners:</strong> Major civil rights litigation firms, specialized tort lawyers (who can pursue damages against the corporations), and legal defenders like the <strong>Juvenile Law Center</strong>.</li>
+            </ul>
+
+            <h3 class="mt-8"><strong>3. Class-Action Lawsuit: Systemic Violation of <em>Miranda</em> and <em>Gault</em> Rights</strong></h3>
+            <ul>
+                <li><strong>Legal Basis:</strong> Fifth Amendment (Right against Self-Incrimination); Sixth Amendment (Right to Counsel); Fourteenth Amendment (Due Process), as established for youth in <em>In re Gault</em>.</li>
+                <li><strong>Evidence Required:</strong>
+                    <ul>
+                        <li><strong>The "90% Waiver Rate":</strong> This statistic is the cornerstone of the case. It serves as <em>prima facie</em> evidence that waivers are not knowing, intelligent, and voluntary.</li>
+                        <li><strong>Court Records:</strong> Analysis showing the point at which counsel is appointed (often too late), the staggering caseloads of public defenders, and the frequency of "pre-Gault" style hearings.</li>
+                        <li><strong>Expert Testimony:</strong> Developmental psychologists testifying that adolescents are incapable of meaningfully understanding and waiving their <em>Miranda</em> rights under coercive interrogation.</li>
+                        <li><strong>Youth Testimony:</strong> Accounts of interrogation tactics, pressure to confess, and not understanding the right to a lawyer.</li>
+                    </ul>
+                </li>
+                <li><strong>Ideal Legal Partners:</strong> <strong>The Gault Center</strong> (which specializes in this precise issue), in partnership with public defender associations and innocence projects.</li>
+            </ul>
+
+            <h3 class="mt-8"><strong>4. Racial Discrimination Lawsuit: Equal Protection Challenge to the System</strong></h3>
+            <ul>
+                <li><strong>Legal Basis:</strong> Fourteenth Amendment (Equal Protection Clause). While requiring proof of discriminatory intent is a high legal bar, a case can be built on the overwhelming and compounding evidence of bias at every single decision point.</li>
+                <li><strong>Evidence Required:</strong>
+                    <ul>
+                        <li><strong>Compounded Statistical Disparities:</strong> Evidence showing how racial bias amplifies at each stage: arrest (Black youth are <strong>31.6%</strong> of school arrests despite being <strong>15.1%</strong> of students), charging decisions, pre-trial detention, waiver to adult court, and sentencing.</li>
+                        <li><strong>Comparative Evidence:</strong> Data showing youth of color receive harsher dispositions (e.g., incarceration vs. probation, solitary confinement) than white youth for identical offenses.</li>
+                        <li><strong>Historical Context:</strong> Evidence documenting the historical use of the juvenile system as a tool of racial control in the specific jurisdiction.</li>
+                    </ul>
+                </li>
+                <li><strong>Ideal Legal Partners:</strong> This requirest a national organization like the <strong>NAACP Legal Defense Fund</strong> or the <strong>ACLU's Racial Justice Program</strong>, working in close concert with data experts from <strong>The Sentencing Project</strong> and legal strategists from the <strong>Juvenile Law Center</strong>.</li>
+            </ul>
+            </div>
+            `,
+        };
+
+        const resourceMap = {
+            title: "Resource & Alliance Map",
+            icon: "map",
+            content: `
+            <div class="prose-custom">
+            <p>This section maps the intelligence needs of key allies and identifies high-impact opportunities for strategic collaboration. The goal is to equip our coalition with the precise information required to maximize their effectiveness.</p>
+
+            <h3><strong>2.1 Mapping Needs to Allies</strong></h3>
+            <table>
+                <thead><tr><th>Allied Group / Organization Type</th><th>Intelligence of Highest Value</th><th>Strategic Application</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Legal & Constitutional Defenders</strong><br/><em>(Juvenile Law Center, The Gault Center)</em></td>
+                        <td>- Data on the <strong>90% <em>Miranda</em> waiver rate</strong>.<br/>- Evidence of systemic denial of counsel (<code>pre-Gault mode</code>).<br/>- Documented patterns of <strong>illegal solitary confinement</strong>, especially its disproportionate use on youth of color.</td>
+                        <td>Fuel class-action lawsuits challenging unconstitutional practices. Provide evidence for innocence claims and petitions for resentencing. Arm defense attorneys with data to challenge coerced confessions.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Narrative & Empowerment Groups</strong><br/><em>(Represent Justice, Justice for Families)</em></td>
+                        <td>- Statistics on <strong>racial disparity</strong> (e.g., Black youth are 4.7x more likely to be incarcerated).<br/>- Details of dehumanizing conditions (sewage, infestations).<br/>- Personal stories implicit in the <strong>657 substantiated sexual abuse incidents</strong>.</td>
+                        <td>Humanize the crisis for the public and policymakers. Mobilize system-impacted individuals as powerful advocates. Create content that builds empathy and counters fear-based narratives.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Policy & System Architects</strong><br/><em>(The Annie E. Casey Fdn., The Sentencing Project)</em></td>
+                        <td>- The core economic argument: <strong>$214,620</strong> (detention) vs. <strong>$5,000</strong> (alternatives).<br/>- Case studies of successful reform models (VA, Clayton Co. GA, Miami-Dade FL).<br/>- Data on the parasitic supply chain of over 4,100 corporations profiting from the system.</td>
+                        <td>Craft evidence-based policy proposals for state and federal legislators. Provide fiscal conservatives with a non-ideological rationale for de-incarceration. Advocate for budget shifts from prisons to community programs.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Investigative Media & Journalists</strong><br/><em>(Reveal, Open Investigation)</em></td>
+                        <td>- The financial trail: <strong>GEO/CoreCivic lobbying expenditures</strong> and politician recipients.<br/>- The massive lawsuit figures (<strong>$4B in LA County</strong>).<br/>- Leads on specific facilities with high abuse rates (GA, MD, WA).</td>
+                        <td>Provide the evidentiary basis for high-impact exposés. Uncover direct quid-pro-quo corruption between corporations and politicians. Focus public attention on the financial unsustainability and criminality of the system.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>On-the-Ground Implementers</strong><br/><em>(YAP, Credible Messenger Movement)</em></td>
+                        <td>- Data proving the <strong>failure of incarceration</strong> (high recidivism) and the <strong>success of community models</strong> (lower re-arrest rates).<br/>- Intelligence on systemic gaps (e.g., 75% of facilities fail suicide prevention standards).</td>
+                        <td>Justify funding requests to local and state governments. Recruit mentors and staff by demonstrating the urgent need and proven impact of their work. Tailor programs to address the specific failures of the carceral system.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="mt-8"><strong>2.2 Strategic Collaboration Opportunities</strong></h3>
+            <ul>
+                <li><strong>Legal Defenders + Narrative Groups:</strong> The stories of abuse and injustice gathered by narrative groups can become the "named plaintiffs" and human evidence in class-action lawsuits filed by legal defenders. This combination transforms abstract legal challenges into powerful public campaigns.</li>
+                <li><strong>Investigative Media + Policy Architects:</strong> Journalists can use the financial data and leads on facility abuse to create explosive reports. Policy architects can then leverage the resulting public outrage and media attention to introduce targeted legislation (e.g., banning private contracts, mandating reinvestment of savings) at the precise moment of maximum political pressure.</li>
+                <li><strong>On-the-Ground Implementers + Reform-Minded Law Enforcement/Judges:</strong> Credible messengers and wraparound service providers can partner with figures like Judge Steven Teske to create formal diversion pathways. This collaboration provides law enforcement with a credible alternative to arrest and detention, allowing them to become partners in reducing incarceration while still fulfilling their public safety mandate.</li>
+                <li><strong>All Allies + Financial Accountability Campaign:</strong> The entire coalition can unite around a single, powerful message: <em>"The system is bankrupting us."</em> Using the staggering lawsuit figures ($4B in LA) and the exorbitant cost-per-youth ($214k), a unified campaign can target taxpayers and fiscal conservatives, arguing that dismantling the system is not a matter of ideology, but of fiscal responsibility.</li>
+            </ul>
+            </div>
+            `,
+        };
+
+        const racialDisparityData = {
+            labels: [['American Indian/', 'Alaska Native Youth'], 'Black Youth', 'White Youth'],
+            datasets: [{
+                label: 'Likelihood of Incarceration vs. White Youth',
+                data: [3.1, 4.7, 1.0],
+                backgroundColor: 'rgba(185, 28, 28, 0.6)',
+                borderColor: 'rgba(185, 28, 28, 1)',
+                borderWidth: 2
+            }]
+        };
+
+        const corporateLobbyingData = {
+            labels: ['GEO Group Lobbying', 'CoreCivic Lobbying', 'GEO Group Contributions', 'CoreCivic Contributions'],
+            datasets: [{
+                label: 'Expenditure (in USD)',
+                data: [1380000, 1770000, 2200000, 650000],
+                backgroundColor: [
+                    'rgba(185, 28, 28, 0.7)',
+                    'rgba(159, 18, 57, 0.7)',
+                    'rgba(127, 29, 29, 0.7)',
+                    'rgba(100, 20, 20, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(185, 28, 28, 1)',
+                    'rgba(159, 18, 57, 1)',
+                    'rgba(127, 29, 29, 1)',
+                    'rgba(100, 20, 20, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // ========================================================================
+        // END: data.js content
+        // ========================================================================
+
+
+        // ========================================================================
+        // START: chart_config.js content
+        // ========================================================================
+
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                tooltip: {
+                    backgroundColor: '#1f2937',
+                    titleColor: '#f9fafb',
+                    bodyColor: '#d1d5db',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    padding: 10,
+                    displayColors: true,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(55, 65, 81, 0.5)',
+                    },
+                    ticks: {
+                        color: '#9ca3af',
+                        font: {
+                            family: "'Roboto Mono', monospace",
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                    ticks: {
+                        color: '#d1d5db',
+                        font: {
+                            family: "'Inter', sans-serif",
+                            size: 12,
+                        },
+                        maxRotation: 0,
+                        minRotation: 0
+                    }
+                }
+            }
+        };
+
+        const pieChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#d1d5db',
+                        font: {
+                            family: "'Inter', sans-serif",
+                            size: 12,
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#1f2937',
+                    titleColor: '#f9fafb',
+                    bodyColor: '#d1d5db',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    padding: 10,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+
+
+        function createRacialDisparityChart(canvasId, data) {
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        ...chartOptions.scales,
+                        y: {
+                            ...chartOptions.scales.y,
+                            title: {
+                                display: true,
+                                text: 'Likelihood Multiplier',
+                                color: '#9ca3af',
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createTexasRacialDisparityChart(canvasId, data) {
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    ...chartOptions,
+                     plugins: {
+                        ...chartOptions.plugins,
+                        legend: {
+                            display: true,
+                            position: 'top',
+                             labels: {
+                                color: '#d1d5db',
+                            }
+                        },
+                    },
+                    scales: {
+                        ...chartOptions.scales,
+                        y: {
+                            ...chartOptions.scales.y,
+                            title: {
+                                display: true,
+                                text: 'Incarceration Rate (per 100,000)',
+                                color: '#9ca3af',
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCorporateLobbyingChart(canvasId, data) {
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: { ...pieChartOptions }
+            });
+        }
+
+        // ========================================================================
+        // END: chart_config.js content
+        // ========================================================================
+
+
+        // ========================================================================
+        // START: ui.js content
+        // ========================================================================
+
+        function createSectionHeader(title, icon) {
+            return `
+                <h2 class="section-title">
+                    <i data-lucide="${icon}"></i>
+                    <span>${title}</span>
+                </h2>
+            `;
+        }
+
+        function renderMissionStatement(containerId, content) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `<p class="prose prose-custom max-w-none prose-invert">${content}</p>`;
+            }
+        }
+
+        function renderMasterReport(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    ${createSectionHeader(data.title, data.icon)}
+                    <div class="prose-custom max-w-none">
+                        ${data.content}
+                    </div>
+                    <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="chart-container">
+                            <h3 class="text-lg font-semibold text-gray-100 mb-4 text-center">Racial Disparity in Incarceration Likelihood</h3>
+                            <canvas id="racialDisparityChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3 class="text-lg font-semibold text-gray-100 mb-4 text-center">Private Prison Political Spending (2023-24)</h3>
+                            <canvas id="corporateLobbyingChart"></canvas>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderTexasBriefing(containerId, data) {
+            const container = document.getElementById(containerId);
+            if(container) {
+                container.innerHTML = `
+                 ${createSectionHeader(data.title, data.icon)}
+                    <div class="prose-custom max-w-none">
+                        ${data.content}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="chart-container md:col-span-2 lg:col-span-1 mx-auto w-full lg:w-1/2">
+                             <h3 class="text-lg font-semibold text-gray-100 mb-4 text-center">Texas Racial Disparity (2021 Data)</h3>
+                            <canvas id="texasRacialDisparityChart"></canvas>
+                        </div>
+                    </div>
+
+                `
+            }
+        }
+
+        function renderPriorityTargets(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const facilitiesHtml = data.facilities.map(item => `
+                <div class="target-card">
+                    <h4 class="card-title">${item.name}</h4>
+                    <p class="card-rationale-title">Rationale</p>
+                    <p class="card-rationale-text">${item.rationale}</p>
+                </div>
+            `).join('');
+
+            const politiciansHtml = data.politicians.map(item => `
+                <div class="target-card">
+                    <h4 class="card-title">${item.profile}</h4>
+                    <p class="card-subtitle">${item.jurisdiction}</p>
+                    <p class="card-rationale-title">Recommended Action</p>
+                    <p class="card-rationale-text">${item.rationale}</p>
+                </div>
+            `).join('');
+
+            const corporationsHtml = data.corporations.map(item => `
+                <div class="target-card">
+                    <h4 class="card-title">${item.name}</h4>
+                    <p class="card-rationale-title">Role in System</p>
+                    <p class="card-rationale-text">${item.role}</p>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                ${createSectionHeader(data.title, data.icon)}
+                <p class="mb-12 text-lg text-gray-400 max-w-4xl">${data.intro}</p>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-red-600 mb-6 font-mono tracking-wide flex items-center"><i data-lucide="building" class="mr-3"></i>High-Priority Facilities</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${facilitiesHtml}
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-bold text-red-600 mb-6 font-mono tracking-wide flex items-center"><i data-lucide="user-x" class="mr-3"></i>Political Accountability Focus</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${politiciansHtml}
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-bold text-red-600 mb-6 font-mono tracking-wide flex items-center"><i data-lucide="briefcase" class="mr-3"></i>Corporate Accountability Focus</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${corporationsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderActionFrameworks(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    ${createSectionHeader(data.title, data.icon)}
+                    <div class="prose-custom max-w-none">
+                        ${data.content}
+                    </div>
+                `;
+            }
+        }
+
+        function renderLegalStrategies(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    ${createSectionHeader(data.title, data.icon)}
+                    <div class="prose-custom max-w-none">
+                        ${data.content}
+                    </div>
+                `;
+            }
+        }
+
+        function renderResourceMap(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    ${createSectionHeader(data.title, data.icon)}
+                    <div class="prose-custom max-w-none">
+                        ${data.content}
+                    </div>
+                `;
+            }
+        }
+
+        // ========================================================================
+        // END: ui.js content
+        // ========================================================================
+
+
+        // ========================================================================
+        // START: main.js content
+        // ========================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for Lucide icons to be loaded before creating them
+            if (window.lucide) {
+                 initApp();
+            } else {
+                // If lucide is not ready, we can wait a bit or listen for its script load
+                setTimeout(initApp, 100);
+            }
+        });
+
+        function initApp() {
+            lucide.createIcons();
+            setupNavigation();
+            renderAllSections();
+            // The charts must be created AFTER the sections are rendered
+            // because the canvas elements need to exist in the DOM.
+            createAllCharts();
+        }
+
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        function renderAllSections() {
+            renderMissionStatement('mission-statement-container', missionStatement);
+            renderMasterReport('master-report-container', masterReport);
+            renderTexasBriefing('texas-briefing-container', texasBriefing);
+            renderPriorityTargets('priority-targets-container', priorityTargets);
+            renderActionFrameworks('action-frameworks-container', actionFrameworks);
+            renderLegalStrategies('legal-strategies-container', legalStrategies);
+            renderResourceMap('resource-map-container', resourceMap);
+
+            // Re-run createIcons after rendering new content that includes lucide icons
+            lucide.createIcons();
+        }
+
+        function createAllCharts() {
+            if (document.getElementById('racialDisparityChart')) {
+               createRacialDisparityChart('racialDisparityChart', racialDisparityData);
+            }
+             if (document.getElementById('texasRacialDisparityChart')) {
+               createTexasRacialDisparityChart('texasRacialDisparityChart', texasRacialDisparityData);
+            }
+            if (document.getElementById('corporateLobbyingChart')) {
+                createCorporateLobbyingChart('corporateLobbyingChart', corporateLobbyingData);
+            }
+        }
+        // ========================================================================
+        // END: main.js content
+        // ========================================================================
+
+    </script>
+</body>
+</html>
