@@ -1247,14 +1247,30 @@
         // START: main.js content
         // ========================================================================
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Wait for Lucide icons to be loaded before creating them
+        function onLucideLoaded(callback) {
             if (window.lucide) {
-                 initApp();
+                callback();
             } else {
-                // If lucide is not ready, we can wait a bit or listen for its script load
-                setTimeout(initApp, 100);
+                const script = document.querySelector('script[src="https://unpkg.com/lucide@latest"]');
+                if (script) {
+                    script.addEventListener('load', callback);
+                } else {
+                    // Fallback in case the script is not found
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // A less reliable fallback
+                        const interval = setInterval(() => {
+                            if (window.lucide) {
+                                clearInterval(interval);
+                                callback();
+                            }
+                        }, 100);
+                    });
+                }
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            onLucideLoaded(initApp);
         });
 
         function initApp() {
